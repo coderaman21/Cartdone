@@ -1,0 +1,120 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Checkout {% endblock %}
+{% block checkoutactive %} active {% endblock %}
+{% block body %}
+
+
+<div class="container my-4">
+  <h2>Your Items In Cart Are :</h2>
+  <ul class="list-group" id="list-item">
+
+  </ul>
+
+  <div class="col my-4">
+    <h2> Enter Address and Other Details to Order</h2>
+    <form id="form" class="row g-3" action='/shop/checkout/' method="POST"> {% csrf_token %}
+      <input type="hidden"  name='itemsJson' id="itemsJson">
+      <div class="col-md-6">
+        <label for="inputname" class="form-label">Name</label>
+        <input type="text" class="form-control" id="inputname" name='name' placeholder="Name" required>
+      </div>
+      <div class="col-md-6">
+        <label for="inputEmail4" class="form-label">Email</label>
+        <input type="email" class="form-control" id="inputEmail4" name='email' placeholder="Email" required>
+      </div>
+      <div class="col-12">
+        <label for="inputnumber" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="inputnumber" name='number' placeholder="number" required>
+      </div>
+      <div class="col-12">
+        <label for="inputAddress" class="form-label">Address</label>
+        <input type="text" class="form-control" id="inputAddress" name='address' placeholder="1234 Main St" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputCity" class="form-label">City</label>
+        <input type="text" class="form-control" name='city_name' id="inputCity" required>
+      </div>
+      <div class="col-md-6">
+        <label for="inputState" class="form-label">State</label>
+        <input type="text" class="form-control" name='state_name' id="inputState" required>
+      </div>
+
+      <div class="col-md-2">
+        <label for="inputZip" class="form-label">Zip</label>
+        <input type="text" class="form-control" id="inputZip" name='zip_code' required>
+      </div>
+      <div class="col-12">
+        <button type="submit" id="orderbtn" class="btn btn-primary">Place Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+<script>
+
+  // Check if cart is empty or not 
+  if (localStorage.getItem('cart') == null) {
+    var cart = {};
+  }
+  else {
+    var cart = JSON.parse(localStorage.getItem('cart'));
+    updatecart(cart);
+  }
+
+  function updatecart(cart, idstr = '') {
+    if (!idstr == '') {
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      document.getElementById(idstr).innerHTML = '<button class="btn btn-primary minus" id="minuspr' + idstr + '">-</button><span id="val' + idstr + '">' + cart[idstr][1] + '</span><button id="pluspr' + idstr + '" class="btn btn-primary plus">+</button>';
+    }
+    let sum = 0;
+    for (var item in cart) {
+      sum = sum + cart[item][1];
+    }
+    document.getElementById('cart').innerHTML = sum;
+
+  }
+ if(! $.isEmptyObject(cart)){
+  let price = 0;
+  for (item in cart) {
+    str = '<li class="list-group-item d-flex justify-content-between align-items-center">' + cart[item][0] + ' <span class="badge bg-primary rounded-pill">' + cart[item][1] + '</span></li>'
+    $('#list-item').append(str);
+    price = price + cart[item][1] * cart[item][2];
+  }
+  str2 = '<li class="list-group-item d-flex justify-content-between align-items-center"><b>Total price (rs.)</b> <span> <b>' + price + '</b></span></li>'
+  $('#list-item').append(str2);
+}
+  else{
+      str = "<li class='list-group-item d-flex justify-content-between align-items-center'><b>sorry! you don't have any itmes in your cart </b> "
+      $('#list-item').append(str);
+  }
+  // put items in hidden input tag 
+  $('#itemsJson').val(JSON.stringify(cart));
+
+$('#orderbtn').click(function(){
+  if($.isEmptyObject(cart)){
+    alert('Please add some items in your cart before checking out');
+    window.location = '/shop/'
+    // document.getElementById('form').action ='/shop/';
+  }
+  else{
+    {% if thanks %}
+      localStorage.clear(); 
+    {% endif %}
+    }
+  })
+//   if($.isEmptyObject(cart)){
+//     alert('Please add some items in your cart before checking out');
+//   }
+//   else{
+//     localStorage.clear(); 
+//     alert('hello {{id}}');
+//   }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Contact {% endblock %}
+{% block contactactive %} active {% endblock %}
+{% block body %}
+
+
+<div class="container my-2">
+    <form class="row g-3" action="/shop/contact/" id="form"  method="POST"> {% csrf_token %}
+        <div class="col-md-6">
+            <label for="inputname" class="form-label">Name :</label>
+            <input type="text" class="form-control" id="inputname" name="name">
+        </div>
+        <div class="col-md-6">
+            <label for="inputemail" class="form-label">Email :</label>
+            <input type="email" class="form-control" id="inputemail" name="email">
+        </div>
+        <div class="col-md-6">
+            <label for="inputnumber" class="form-label">Number :</label>
+            <input type="tel" class="form-control" id="inputnumber" name="number">
+        </div>
+       
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Write your concern here :</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="desc"></textarea>
+          </div>
+    
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Contact Us</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+$('#form').submit(function(event){
+    alert('Thank you for contacting with us ');
+})
+
+
+</script>
+
+{% endblock %}

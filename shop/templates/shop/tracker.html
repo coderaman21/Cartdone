@@ -1,0 +1,100 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Tracker {% endblock %}
+
+{% block trackeractive %} active {% endblock %}
+{% block body %}
+
+<div class="container my-3">
+  <h2>Enter Your order id And Email to Track Your Order :</h2>
+  <form class="row g-3" id="trackerform" method="POST"> {% csrf_token %}
+    <div class="col-md-6">
+      <label for="inputorderid" class="form-label">Order Id</label>
+      <input type="text" class="form-control" id="inputorderid" name="order_id">
+    </div>
+    <div class="col-md-6">
+      <label for="inputemail" class="form-label">Email</label>
+      <input type="email" class="form-control" id="inputemail" name="email">
+    </div>
+
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Track Order</button>
+    </div>
+  </form>
+  <span id='span' style="visibility:hidden ;">
+    <div class="col my-4">
+      <h2>Your Order status : </h2>
+      <div class="col-12">
+        <div>
+          <ul class="list-group" id="items">
+
+          </ul>
+        </div>
+      </div>
+      <span id="span2">
+        <h2>Your Order Details : </h2>
+        <div class="col-12">
+          <div>
+            <ul class="list-group" id="items1">
+
+            </ul>
+          </div>
+        </div>
+      </span>
+    </div>
+  </span>
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+  $('#trackerform').submit(function (event) {
+
+    $('#items').empty();
+    $('#items1').empty();
+    var formData = {
+      'order_id': $('input[name=order_id]').val(),
+      'email': $('input[name=email]').val(),
+      'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+    }
+    $.ajax({
+      type: 'POST',
+      url: '/shop/tracker/',
+      data: formData,
+      encode: true
+    })
+      .done(function (data) {
+        document.getElementById('span').style.visibility = 'visible';
+        document.getElementById('span2').style.visibility = 'visible';
+        if (!(data == '{}')) {
+          data = JSON.parse(data);
+          // to show order status 
+          data1 = data[0];
+          for (var item in data1) {
+            str = '<li class="list-group-item d-flex justify-content-between align-items-center">' + data1[item]['text'] + ' <span class="badge bg-primary rounded-pill">' + data1[item]['time'] + '</span></li>'
+            $('#items').append(str);
+          }
+          // to show order details 
+          data2 = JSON.parse(data[1])
+          for (var i in data2) {
+            str = '<li class="list-group-item d-flex justify-content-between align-items-center">' + data2[i][0] + ' <span class="badge bg-primary rounded-pill">' + data2[i][1] + '</span></li>'
+            $('#items1').append(str);
+          }
+        }
+        // if order not found
+        else {
+          str = '<li class="list-group-item d-flex justify-content-between align-items-center"> sorry ! couldn\'t fetch your order status , please check your order id and email address again </li>'
+          $('#items').append(str);
+          document.getElementById('span2').style.visibility = 'hidden';
+        }
+
+
+
+      })
+    event.preventDefault();
+
+  })
+</script>
+
+
+{% endblock %}

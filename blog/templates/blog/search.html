@@ -1,0 +1,33 @@
+{% extends 'blog/basic.html' %}
+{% block title %} Blog  Search - '{{query}}' {% endblock %}
+
+{% block body %}
+
+{% if result %}
+<div class="container my-3">
+    <div class="row mb-2">
+        {% for blog in blog_list %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">{{blog.title}}</strong>
+                    <h3 class="mb-0">{{blog.headind}}</h3>
+                    <div class="mb-1 text-muted">{{blog.pub_date}}</div>
+                    <p class="card-text mb-auto">{{blog.content|slice:'0:100'}}</p>
+                    <a href="/blog/blogpost/{{blog.blog_id}}" class="stretched-link">Continue reading</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img   src="/media/{{blog.thumbnail}}" class="bd-placeholder-img" width="200" height="250" aria-label="Placeholder: Thumbanil"/>
+                        <title>Placeholder</title>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<h1 class="text-center">Sorry we couldn't find your search -'{{query|title}}'</h1>
+<h4 class="text-center" >Try searching relevent product name or category</h4>
+{% endif %}
+
+{% endblock %}

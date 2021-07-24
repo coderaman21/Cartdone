@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> {% block title%} {% endblock %} </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  
+   <style>
+   .dropdown-menu[data-bs-popper]{left: -39px;}
+   .dropdown{list-style: none;}
+   .dropdown a{
+      color: white;
+      display: contents;
+    }
+    .dropdown-menu a{color: black; display: block;}
+    .sticky-top{z-index: 1041;}
+   </style> 
+  {% block css %}
+  {% endblock %}
+
+</head>
+
+<body>
+
+  {% load static %}
+  <nav class="navbar sticky-top  navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/shop">Shopee.com</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a id="home" class="nav-link {% block homeactive %} {% endblock %}" aria-current="page"
+              href="/shop">Home</a>
+          </li>
+          <li class="nav-item">
+            <a id="tracker" class="nav-link {% block trackeractive %} {% endblock %}" href="/shop/tracker">Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a id="checkout" class="nav-link {% block checkoutactive %} {% endblock %}"
+              href="/shop/checkout">Checkout</a>
+          </li>
+          <li class="nav-item">
+            <a id="blog" class="nav-link {% block blogactive %} {% endblock %}" href="/blog/">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a id="contact" class="nav-link {% block contactactive %} {% endblock %}" href="/shop/contact">Contact
+              Us</a>
+          </li>
+          <li class="nav-item">
+            <a id="about" class="nav-link {% block aboutactive %} {% endblock %}" href="/shop/about">About Us</a>
+          </li>
+
+        </ul>
+        <form action="/shop/search/" class="d-flex" >
+          <input class="form-control me-2" type="search" placeholder="search(category/name)" aria-label="Search" name="searchquery" required>
+          <button class="btn btn-outline-success mx-2" type="submit">Search</button>
+        </form>
+
+
+        {% if user.is_authenticated %}
+        <button type="button" id='popover' data-html="true" class="btn btn-secondary "
+          data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom popover">
+          Cart (<span id="cart">0</span>)
+        </button>
+        <li class="nav-item dropdown ml-4 ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
+            {{request.user}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/shop/signout/">Logout</a>
+          </div>
+        </li>
+        {% else %}
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success mx-2" data-toggle="modal" data-target="#signinModal">
+          Sign in
+        </button>
+        
+        <button type="button" class="btn btn-success " data-bs-toggle="modal" data-bs-target="#signupModal">
+          Sign up
+        </button>
+        {% endif %}
+
+        <!--signup Modal -->
+        <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sign up</h5>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button> -->
+                <a href="#" id="closebtn" class="close" data-dismiss="modal" aria-label="close">&times;</a>
+              </div>
+              <div class="modal-body">
+                <div class="col-12">
+                  <form class="row g-3" action="/shop/signup/" method="POST"> {% csrf_token %}
+                    <div>
+                      <label for="fname" class="form-label">First Name :</label>
+                      <input type="text" class="form-control" id="fname" name="fname" placeholder="eg. Aman,nehul,ajay"
+                        required>
+                    </div>
+                    <div>
+                      <label for="lname" class="form-label">Last Name :</label>
+                      <input type="text" class="form-control" id="lname" name="lname"
+                        placeholder="eg. soni,sahu ,kahrol" required>
+                    </div>
+                    <div>
+                      <label for="email" class="form-label">Email :</label>
+                      <input type="email" class="form-control" id="email" name="email"
+                        placeholder="eg.amans123@gmail.com" required>
+                    </div>
+                    <div>
+                      <label for="username" class="form-label">Username(max 10 char.) :</label>
+                      <input type="text" class="form-control" id="username" name="username"
+                        placeholder="alhpanumeric and lower case" required>
+                    </div>
+                    <div>
+                      <label for="phone" class="form-label">Phone No. :</label>
+                      <input type="tel" class="form-control" id="phone" name="phone" placeholder="eg.+9199732*****"
+                        required>
+                    </div>
+                    <div>
+                      <label for="pass1" class="form-label">Password :</label>
+                      <input type="password" class="form-control" id="pass1" name="pass1"
+                        placeholder="enter a strong password" required>
+                    </div>
+                    <div>
+                      <label for=" pass2" class="form-label">confirm Password :</label>
+                      <input type="password" class="form-control" id=" pass2" name="pass2"
+                        placeholder="confirm your password" required>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Sign up</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   <!-- signup modal ends here -->
+
+        <!--sign in Modal -->
+        <div class="modal fade" show="true" focus='trues' id="signinModal" data-backdrop="static" data-keyboard="false"
+          tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Sign in</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="col-12">
+                  <form class="row g-3" action="/shop/signin/" method="POST"> {% csrf_token %}
+                    <div>
+                      <label for="signinusername" class="form-label">Username :</label>
+                      <input type="text" class="form-control" id="signinusername" name="signinusername" placeholder=""
+                        required>
+                    </div>
+                    <div>
+                      <label for=" signinpassword" class="form-label">password :</label>
+                      <input type="password" class="form-control" id=" signinpassword" name="signinpassword"
+                        placeholder="" required>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Sign in</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   <!-- signin modal ends here -->
+        
+
+
+      </div>
+    </div>
+  </nav>
+  {% include 'shop/messages.html' %}
+  {% block body %}{% endblock %}
+</body>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+  integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+  integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+ // modal close button activation
+ $('#closebtn').click(function(){
+   $("#signupModal").modal('hide');
+ })
+
+  // Check if cart is empty or not 
+  if (localStorage.getItem('cart') == null) {
+    var cart = {};
+  }
+  else {
+    var cart = JSON.parse(localStorage.getItem('cart'));
+    updatecart(cart);
+  }
+  
+  function updatecart(cart ,idstr=''){
+    if(! idstr == ''){
+      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      document.getElementById(idstr).innerHTML = '<button class="btn btn-primary minus" id="minuspr'+idstr+'">-</button><span id="val'+idstr+'">'+cart[idstr][1]+'</span><button id="pluspr'+idstr+'" class="btn btn-primary plus">+</button>';
+    }
+    
+    let sum =0;
+    for(var item in cart){
+      sum = sum+cart[item][1];
+    }
+    document.getElementById('cart').innerHTML = sum;
+    updatepopover(cart);
+  }
+  
+  // To show popover
+  updatepopover(cart);
+  function updatepopover(cart){
+    let popstr = '';
+    if(! $.isEmptyObject(cart)){
+      popstr = '<h6>your Items in cart are :</h6>';
+      for (const key in cart) {
+        popstr = popstr + document.getElementById('name' + key).innerHTML + ` Qty : ${cart[key][1]}  <br> `
+        
+      }
+      popstr = popstr + '<br> <button onclick="clearcart()" class="btn btn-primary"> Clearcart</button>  <a href="/shop/checkout" class="btn btn-primary">Checkout</a> ';
+    }
+    else{
+      popstr = "<h6>sorry you don't  have items in your cart</h6>"; 
+    }
+    document.getElementById('popover').setAttribute('data-content',popstr)
+  }
+  $('#popover').popover();
+  
+  function clearcart(){
+    cart = JSON.parse(localStorage.getItem('cart'));
+    for(i in cart){
+      document.getElementById(i).innerHTML = '<button class="btn btn-primary addtocart"  id="add'+i+'"> Add to cart </button>'
+    } 
+    localStorage.clear();
+    cart={};
+    updatecart(cart);
+   }
+
+ </script>
+
+{% block js %} {% endblock %}
+
+</html>

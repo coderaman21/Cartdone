@@ -1,0 +1,140 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} Shop Home {% endblock %}
+{% block homeactive %} active {% endblock %}
+
+{% block css %}
+<style>
+  .col-md-3 {
+    display: inline-block;
+    margin-left: -4px;
+  }
+
+  .col-md-3 img {
+    width: 286px;
+    height: 294px;
+  }
+
+  .carousel-indicators [data-bs-target] {
+    background-color: blue;
+  }
+
+  body .carousel-indicators {
+    bottom: 0;
+  }
+
+  body .carousel-indicators li {
+    background-color: blue;
+  }
+
+  body .carousel-control-prev-icon,
+  body .carousel-control-next-icon {
+    background-color: blue;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    top: auto;
+    bottom: auto;
+    width: 10%;
+    margin-top: -250px;
+  }
+
+  body .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+
+{% load static %}
+<div class="container my-4">
+  <!-- slideshow starts here  -->
+  {% for product,nslides in allprods %}
+  <h2>{{product.0.category|title}} - Reccomended Items For You</h2>
+  <div class="row">
+    <div id="demo{{forloop.counter}}" class=" col carousel slide" data-bs-ride="carousel">
+      <ul class="carousel-indicators">
+        <li data-bs-target="#demo{{forloop.counter}}" data-bs-slide-to="0" class="active"></li>
+        {% for i in nslides %}
+        <li data-bs-target="#demo{{forloop.parentloop.counter}}" data-bs-slide-to="{{i}}"></li>
+        {% endfor %}
+      </ul>
+
+      <div class="container carousel-inner no-padding my-3">
+        <div class="carousel-item active">
+          {% for i in product %}
+          <div class="col-xs-3 col-sm-3 col-md-3">
+            <div class="card" style="width: 18rem;">
+              <img src="/media/{{i.image}}" class="card-img-top" alt="...">
+              <!-- {{product.0.product_name}} for 0th item of product  -->
+              <div class="card-body">
+                <h6 id="namepr{{i.product_id}}" class="card-title">{{i.product_name}}</h6>
+                <p class="card-text">{{i.desc|slice:'0:10'}}.....</p>
+                <h6>rs.<span id="pricepr{{i.product_id}}">{{i.price}}</span></h6>
+                <span class="cart" id="pr{{i.product_id}}"><button class="btn btn-primary addtocart" id="addpr{{i.product_id}}" >Add To Cart</button></span>
+                <a href="/shop/productview/{{i.product_id}}" class="btn btn-primary">Quick View</a>
+              </div>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+        </div>
+        <div class="carousel-item">
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#demo{{forloop.counter}}" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo{{forloop.counter}}" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+  // Add items to cart 
+    $('.cart').on( 'click','button.addtocart', function (){
+    var idstr = this.id.toString().slice(3,);
+    let qty = 0;
+    let name = document.getElementById('name'+idstr).innerHTML;
+    let price = document.getElementById('price'+idstr).innerHTML;
+    if (cart[idstr] == undefined) {
+      qty = 1;
+      cart[idstr] = [name,qty,parseInt(price)];
+    }
+    else {
+      qty = cart[idstr][1] + 1;
+      cart[idstr] = [name ,qty ,parseInt(price)];
+    }
+    updatecart(cart,idstr);
+    
+  })
+  
+  // if plus or minus button is clicked , change the cart 
+  $('.cart').on('click', 'button.plus',function(){
+    var id = this.id.toString().slice(6,);
+    cart[id][1] = cart[id][1] + 1;
+    document.getElementById('val'+id).innerHTML = cart[id][1];
+    updatecart(cart,id);
+  })
+  $('.cart').on('click', 'button.minus',function(){
+    var id = this.id.toString().slice(7,);
+    cart[id][1] = Math.max(0, cart[id][1] - 1);
+    document.getElementById('val'+id).innerHTML =''+ cart[id][1]+'';
+    updatecart(cart,id);
+  })
+
+
+</script>
+{% endblock %}
