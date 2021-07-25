@@ -9,11 +9,11 @@
   <form class="row g-3" id="trackerform" method="POST"> {% csrf_token %}
     <div class="col-md-6">
       <label for="inputorderid" class="form-label">Order Id</label>
-      <input type="text" class="form-control" id="inputorderid" name="order_id">
+      <input type="text" class="form-control" id="inputorderid" name="Order_id">
     </div>
     <div class="col-md-6">
       <label for="inputemail" class="form-label">Email</label>
-      <input type="email" class="form-control" id="inputemail" name="email">
+      <input type="email" class="form-control" id="inputemail" name="Email">
     </div>
 
     <div class="col-12">
@@ -53,8 +53,8 @@
     $('#items').empty();
     $('#items1').empty();
     var formData = {
-      'order_id': $('input[name=order_id]').val(),
-      'email': $('input[name=email]').val(),
+      'order_id': $('input[name=Order_id]').val(),
+      'email': $('input[name=Email]').val(),
       'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
     }
     $.ajax({
@@ -87,9 +87,6 @@
           $('#items').append(str);
           document.getElementById('span2').style.visibility = 'hidden';
         }
-
-
-
       })
     event.preventDefault();
 
