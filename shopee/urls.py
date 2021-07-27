@@ -28,4 +28,5 @@ urlpatterns = [
     path('shop/',include('shop.urls')),
     path('blog/', include('blog.urls')),
     re_path(r'^media/(?P<path>.*)$', serve ,{'document_root':settings.MEDIA_ROOT}),
-] + static(settings.MEDIA_URL,document_root = MEDIA_ROOT )
+]
+
