@@ -159,7 +159,6 @@ def handlesignup(request):
             messages.error(request,"passwords didn't match")
             return redirect('/shop/')
 
-
         # create the user 
         myuser = User.objects.create_user(username,email ,pass1)
         myuser.first_name = fname
