@@ -81,10 +81,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'shopee.wsgi.application'
 
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
