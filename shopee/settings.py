@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-o--h!10)ov#_tthy4!82m)z8zo)(m6*g^l&-0aafb^1$&nb-(7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =False
 
-ALLOWED_HOSTS = ['127.0.0.1','.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['127.0.0.1','.pythonanywhere.com']
 
 
 MESSAGE_TAGS = {
@@ -85,10 +85,10 @@ WSGI_APPLICATION = 'shopee.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
@@ -134,7 +134,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR,'/static/')
 
 # managing media 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
