@@ -28,6 +28,7 @@ DEBUG =False
 
 ALLOWED_HOSTS = ['127.0.0.1','divyanshu21.pythonanywhere.com']
 
+CSRF_COOKIE_DOMAIN = None
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
