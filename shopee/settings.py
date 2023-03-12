@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-o--h!10)ov#_tthy4!82m)z8zo)(m6*g^l&-0aafb^1$&nb-(7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =False
 
-ALLOWED_HOSTS = ['127.0.0.1','.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1','divyanshu21.pythonanywhere.com']
 
 
 MESSAGE_TAGS = {
